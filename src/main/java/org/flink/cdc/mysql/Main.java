@@ -13,25 +13,35 @@ import java.util.Properties;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Configuration configuration = new Configuration();
-        configuration.setInteger("rest.port", 9091);
+//        Configuration configuration = new Configuration();
+//        configuration.setInteger("rest.port", 9091);
         // configuration.setString("execution.checkpointing.interval", "3min");
-        StreamExecutionEnvironment env = StreamExecutionEnvironment
-                .createLocalEnvironmentWithWebUI(configuration);
+//        StreamExecutionEnvironment env = StreamExecutionEnvironment
+//                .createLocalEnvironmentWithWebUI(configuration);
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
         String createSourceTableSQL = "CREATE TABLE source_dest (" +
-                "`id` INT," +
-                "`name` STRING," +
+                "`id` int," +
+                "`password` string," +
+                "`last_login` string," +
+                "`is_superuser` int," +
+                "`username` string," +
+                "`first_name` string," +
+                "`last_name` string," +
+                "`email` string," +
+                "`is_staff` int," +
+                "`is_active` int," +
+                "`date_joined` string," +
                 "PRIMARY KEY (`id`) NOT ENFORCED" +
                 ") WITH (" +
                 "'connector' = 'mysql-cdc'," +
                 "'hostname' = '10.4.45.207'," +
                 "'username' = 'username'," +
                 "'password' = 'password'," +
-                "'database-name' = 'cdc_test_source'," +
-                "'table-name' = 'player_source'," +
-                "'scan.startup.mode' = 'latest-offset'" +
+                "'database-name' = 'hue'," +
+                "'table-name' = 'auth_user'," +
+                "'scan.startup.mode' = 'snapshot'" +
                 ");";
         tableEnv.executeSql(createSourceTableSQL);
         System.out.println(createSourceTableSQL);
