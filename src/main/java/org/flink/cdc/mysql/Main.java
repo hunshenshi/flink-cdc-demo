@@ -22,33 +22,32 @@ public class Main {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
 
-//        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
-//        String createSourceTableSQL = "CREATE TABLE source_dest (" +
-//                "`id` int," +
-//                "`password` string," +
-//                "`last_login` string," +
-//                "`is_superuser` int," +
-//                "`username` string," +
-//                "`first_name` string," +
-//                "`last_name` string," +
-//                "`email` string," +
-//                "`is_staff` int," +
-//                "`is_active` int," +
-//                "`date_joined` string," +
-//                "PRIMARY KEY (`id`) NOT ENFORCED" +
-//                ") WITH (" +
-//                "'connector' = 'mysql-cdc'," +
-//                "'hostname' = 'localhost'," +
-//                "'username' = 'username'," +
-//                "'password' = 'password'," +
-//                "'database-name' = 'hue'," +
-//                "'table-name' = 'auth_user'," +
-//                "'scan.startup.mode' = 'snapshot'" +
-//                ");";
-//        tableEnv.executeSql(createSourceTableSQL);
-//        System.out.println(createSourceTableSQL);
-//        tableEnv.executeSql(createSourceTableSQL);
-//        tableEnv.executeSql("select  * from source_dest").print();
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        String createSourceTableSQL = "CREATE TABLE source_dest (" +
+                "`id` int," +
+                "`password` string," +
+                "`last_login` string," +
+                "`is_superuser` int," +
+                "`username` string," +
+                "`first_name` string," +
+                "`last_name` string," +
+                "`email` string," +
+                "`is_staff` int," +
+                "`is_active` int," +
+                "`date_joined` string," +
+                "PRIMARY KEY (`id`) NOT ENFORCED" +
+                ") WITH (" +
+                "'connector' = 'mysql-cdc'," +
+                "'hostname' = 'localhost'," +
+                "'username' = 'username'," +
+                "'password' = 'password'," +
+                "'database-name' = 'hue'," +
+                "'table-name' = 'auth_user'," +
+                "'scan.startup.mode' = 'snapshot'" +
+                ");";
+        tableEnv.executeSql(createSourceTableSQL);
+        System.out.println(createSourceTableSQL);
+        tableEnv.executeSql("select  * from source_dest").print();
 
 //        String createSinkTableSQL = "CREATE TABLE sink_dest (" +
 //                "`id` INT," +
@@ -71,27 +70,27 @@ public class Main {
 //        Properties properties = new Properties();
 //        properties.setProperty("snapshot.locking.mode", "none");
 //
-        MySqlSource<String> mySqlSource = MySqlSource.<String>builder()
-                .hostname("localhost")
-                .port(3306)
-                .databaseList("cdc_test") // set captured database
-                .tableList("cdc_test.tableA") // set captured table
-                .username("root")
-                .password("")
-//                .serverId("5400-6000") // 设置为区间才能并发运行
-                .serverTimeZone("Asia/Shanghai")
-                .databaseList("hue")
-                .tableList("hue.auth_user")
-//                .debeziumProperties(properties)
-                .deserializer(new JsonDebeziumDeserializationSchema()) // converts SourceRecord to JSON String
-//                .deserializer(new StringDebeziumDeserializationSchema())
-                .startupOptions(StartupOptions.snapshot())
-                .build();
-
-        env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "MySQL Source")
-                // set 4 parallel source tasks
-                .setParallelism(1)
-                .print().setParallelism(1);
-        env.execute("Print MySQL Snapshot");
+//        MySqlSource<String> mySqlSource = MySqlSource.<String>builder()
+//                .hostname("localhost")
+//                .port(3306)
+//                .databaseList("cdc_test") // set captured database
+//                .tableList("cdc_test.tableA") // set captured table
+//                .username("root")
+//                .password("")
+////                .serverId("5400-6000") // 设置为区间才能并发运行
+//                .serverTimeZone("Asia/Shanghai")
+//                .databaseList("hue")
+//                .tableList("hue.auth_user")
+////                .debeziumProperties(properties)
+//                .deserializer(new JsonDebeziumDeserializationSchema()) // converts SourceRecord to JSON String
+////                .deserializer(new StringDebeziumDeserializationSchema())
+//                .startupOptions(StartupOptions.snapshot())
+//                .build();
+//
+//        env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "MySQL Source")
+//                // set 4 parallel source tasks
+//                .setParallelism(1)
+//                .print().setParallelism(1);
+//        env.execute("Print MySQL Snapshot");
     }
 }
